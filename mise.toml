@@ -1,0 +1,115 @@
+min_version = "2025.1.0"
+
+[tools]
+python = "3.12"
+
+[env]
+_.python.venv = { path = ".venv", create = true }
+PYTHONUNBUFFERED = "1"
+PIP_DISABLE_PIP_VERSION_CHECK = "1"
+NO_COLOR = "1"
+TERM = "dumb"
+CI = "1"
+PAGER = "cat"
+MANPAGER = "cat"
+
+[tasks.install]
+description = "Install project dependencies"
+run = [
+  "python -m pip install -U pip",
+  "python -m pip install -e .",
+]
+
+[tasks.install-dev]
+description = "Install project with development dependencies"
+run = [
+  "python -m pip install -U pip",
+  "python -m pip install -e .[dev]",
+]
+
+[tasks.test]
+description = "Run the full pytest suite"
+depends = ["install-dev"]
+run = "pytest -q"
+
+[tasks.test-unit]
+description = "Run parser unit tests only"
+depends = ["install-dev"]
+run = [
+  "pytest -q tests/unit/test_normalize.py",
+  "pytest -q tests/unit/test_headings.py",
+  "pytest -q tests/unit/test_options.py",
+  "pytest -q tests/unit/test_segment.py",
+]
+
+[tasks.test-fixtures]
+description = "Run fixture-based parser tests and golden tests"
+depends = ["install-dev"]
+run = [
+  "pytest -q tests/integration/test_parser_fixtures.py",
+  "pytest -q tests/integration/test_parser_goldens.py",
+]
+
+[tasks.fixtures-spec]
+description = "Write the full capture spec from shared fixture cases"
+depends = ["install-dev"]
+sources = ["tests/fixture_cases.py", "scripts/write_fixture_spec.py"]
+outputs = ["tests/fixtures/fixture-spec.json"]
+run = "python scripts/write_fixture_spec.py"
+
+[tasks.fixtures-spec-local]
+description = "Write a local-only capture spec"
+depends = ["install-dev"]
+run = "python scripts/write_fixture_spec.py --local-only --output tests/fixtures/fixture-spec.local.json"
+
+[tasks.fixtures-capture]
+description = "Capture raw help fixtures using the full fixture spec"
+depends = ["install-dev", "fixtures-spec"]
+run = "python -m automan.capture_fixtures batch tests/fixtures/fixture-spec.json --meta"
+
+[tasks.fixtures-capture-local]
+description = "Capture raw help fixtures using only commands installed locally"
+depends = ["install-dev", "fixtures-spec-local"]
+run = "python -m automan.capture_fixtures batch tests/fixtures/fixture-spec.local.json --meta"
+
+[tasks.goldens-refresh]
+description = "Regenerate parsed golden files from committed help fixtures"
+depends = ["install-dev"]
+sources = [
+  "tests/fixture_cases.py",
+  "tests/fixtures/help/*.help.txt",
+  "src/automan/domain/parser.py",
+  "src/automan/models.py",
+  "scripts/update_goldens.py",
+]
+outputs = ["tests/fixtures/parsed/*.json"]
+run = "python scripts/update_goldens.py"
+
+[tasks.fixtures-refresh]
+description = "Refresh local capture fixtures and regenerate parsed goldens"
+depends = ["fixtures-capture-local", "goldens-refresh"]
+
+[tasks.check]
+description = "Run the core local verification flow"
+depends = ["test-unit", "test-fixtures"]
+
+[tasks.parser-smoke]
+description = "Quick smoke run for parser-focused tests"
+depends = ["install-dev"]
+run = "pytest -q -k 'parser or options or segment'"
+
+[tasks.clean]
+description = "Remove generated caches and build artifacts"
+run = [
+  "find . -type d -name __pycache__ -prune -exec rm -rf {} +",
+  "find . -type f -name '*.pyc' -delete",
+  "rm -rf .pytest_cache .mypy_cache dist build *.egg-info",
+]
+
+[tasks.list-fixtures]
+description = "List committed raw help fixtures"
+run = "find tests/fixtures/help -maxdepth 1 -type f | sort"
+
+[tasks.list-goldens]
+description = "List committed parsed golden files"
+run = "find tests/fixtures/parsed -maxdepth 1 -type f | sort"
