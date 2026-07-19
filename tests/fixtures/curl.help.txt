@@ -1,0 +1,40 @@
+curl 8.5.0 (x86_64-pc-linux-gnu) libcurl/8.5.0
+Release-Date: 2023-12-06
+Protocols: dict file ftp ftps gopher gophers http https imap imaps mqtt pop3 pop3s rtsp smb smbs smtp smtps telnet tftp
+Features: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTP3 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM SPNEGO SSL TLS-SRP UnixSockets zstd
+
+Usage: curl [options...] <url>
+
+ Options: (H) means HTTP/HTTPS only, (F) means FTP only
+      --abstract-unix-socket <path>  Connect via abstract Unix domain socket
+      --alt-svc <file name>          Enable alt-svc with this cache file
+      --anyauth       Pick any authentication method (H)
+  -a, --append        Append to target file when uploading (F/SFTP)
+      --basic         Use HTTP Basic Authentication (H)
+      --cacert <file> CA certificate to verify peer against (SSL)
+      --capath <dir>  CA directory to verify peer against (SSL)
+  -E, --cert <certificate[:password]>  Client certificate file and password (SSL)
+      --cert-status   Verify the status of the server certificate (SSL)
+  -K, --config <file>  Read config from a file
+  -C, --continue-at <offset>  Resumed transfer offset
+  -b, --cookie <data|filename>  Send cookies from string/file (H)
+  -c, --cookie-jar <filename>  Write cookies to <filename> after operation (H)
+      --create-dirs   Create necessary local directory hierarchy
+      --crlf          Convert LF to CRLF in upload
+  -d, --data <data>   HTTP POST data (H)
+      --data-ascii <data>  HTTP POST ASCII data (H)
+      --data-binary <data>  HTTP POST binary data (H)
+  -D, --dump-header <filename>  Write the received headers to <filename>
+  -f, --fail          Fail silently (no output at all) on HTTP errors (H)
+  -F, --form <name=content>  Specify HTTP multipart POST data (H)
+  -h, --help <category>  Get help for commands
+  -H, --header <header/@file>  Pass custom header(s) to server (H)
+  -I, --head          Show document info only
+  -L, --location      Follow redirects (H)
+  -o, --output <file>  Write to file instead of stdout
+  -O, --remote-name   Write output to a file named as the remote file
+  -s, --silent        Silent mode
+  -u, --user <user:password>  Server user and password
+  -A, --user-agent <name>  Send User-Agent <name> to server (H)
+  -v, --verbose       Make the operation more talkative
+  -V, --version       Show version number and quit
