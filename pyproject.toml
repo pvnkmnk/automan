@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "automan"
+version = "0.1.0"
+description = "Auto-generate structured docs and manpages from CLI help output"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "pvnkmnk" }]
+dependencies = ["pydantic>=2.8,<3"]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2,<9",
+  "hypothesis>=6.112,<7",
+  "ruff>=0.5,<1",
+  "mypy>=1.10,<2",
+]
+
+[project.scripts]
+automan-capture = "automan.capture_fixtures:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+packages = ["automan"]
+strict = false
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
