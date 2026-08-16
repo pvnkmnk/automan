@@ -1,5 +1,9 @@
 # automan
 
+> **Portfolio status:** Pending archival. This self-contained generic CLI documentation generator is preserved intact; it has no active portfolio roadmap.
+>
+> **Retained value:** reusable parsing and documentation-generation techniques. **Reactivation condition:** a concrete personal workflow need for its exact command-line interface and maintenance commitment.
+
 > Auto-generate structured man-pages and Markdown docs from any CLI tool's `--help` output.
 
 [![CI](https://github.com/pvnkmnk/automan/actions/workflows/ci.yml/badge.svg)](https://github.com/pvnkmnk/automan/actions/workflows/ci.yml)
